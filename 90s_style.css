@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0231a3; /* Deep blue */
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    border: 3px solid #8a2be2; /* Blue-violet border */
+    background-color: white;
+    color: black;
+}
+
+header {
+    background-color: #8a2be2; /* Blue-violet */
+    color: white;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    background-color: #0231a3; /* Deep blue */
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+    color: yellow; /* Highlight color */
+}
+
+main {
+    padding: 15px;
+}
+
+footer {
+    background-color: #0231a3; /* Deep blue */
+    color: white;
+    padding: 10px;
+    border-top: 3px solid #8a2be2; /* Blue-violet */
+}
+
+marquee {
+    margin: 20px auto;
+    width: 80%;
+    color: #0231a3; /* Use deep blue for contrast */
+}
+
+.image-container {
+    margin: 20px auto;
+    width: 50%; /* Adjust this width as needed */
+}
+
+.image-container img {
+    width: 100%;
+    height: auto; /* Maintains aspect ratio */
+    border: 2px solid #8a2be2; /* Optional border for the image */
+}
