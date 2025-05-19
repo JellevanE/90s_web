@@ -13,7 +13,6 @@ python3 -m http.server 8000
 Then visit `http://localhost:8000` to browse the site.
 
 ## Hosting
-
 Any static website host can serve this project.
 
 ### GitHub Pages
@@ -26,4 +25,6 @@ Any static website host can serve this project.
 2. Register a domain name with a registrar if you haven't already.
 3. Update your domain's DNS records (typically an A or CNAME record) to point to your host.
 4. After DNS propagation, visit your domain to see the site live.
+
+You can also host the files with other services that support static sites.
 
