@@ -70,3 +70,46 @@ marquee {
     height: auto; /* Maintains aspect ratio */
     border: 2px solid #8a2be2; /* Optional border for the image */
 }
+/* Chat interface styles */
+.chat-box {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #f0f0f0;
+    border: 2px dashed #8a2be2;
+    padding: 10px;
+    color: black;
+    text-align: left;
+    height: 200px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.message .icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    font-size: 30px;
+}
+
+.message.bot .icon {
+    animation: bounce 0.6s infinite alternate;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
+}
+
+#chat-form {
+    margin-top: 10px;
+}
+
+#chat-form input[type="text"] {
+    padding: 5px;
+    width: 60%;
+}
