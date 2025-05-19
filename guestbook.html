@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook - 90s Style Website</title>
+    <link rel="stylesheet" href="90s_style.css">
+    <style>
+        /* Additional inline styles for guestbook */
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"], textarea {
+            width: 80%;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        #messages {
+            margin-top: 20px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 2px dashed #8a2be2;
+            color: black;
+        }
+        #messages div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to My 90s Website</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="guestbook.html">Guestbook</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section>
+                <h2>Guestbook</h2>
+                <p>Leave your mark on my website!</p>
+                <form id="guestForm">
+                    <input type="text" id="name" placeholder="Your name" required><br>
+                    <textarea id="message" placeholder="Your message" rows="4" required></textarea><br>
+                    <button type="submit">Sign Guestbook</button>
+                </form>
+                <div id="messages"></div>
+            </section>
+        </main>
+        <footer>
+            <p>© 2024 My 90s Website</p>
+        </footer>
+    </div>
+    <script>
+        // Simple guestbook functionality using localStorage
+        const form = document.getElementById('guestForm');
+        const messagesDiv = document.getElementById('messages');
+
+        function renderMessages() {
+            const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+            messagesDiv.innerHTML = '';
+            entries.forEach(entry => {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>${entry.name}</strong>: ${entry.message}`;
+                messagesDiv.appendChild(div);
+            });
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+            entries.push({ name, message });
+            localStorage.setItem('guestbook', JSON.stringify(entries));
+            form.reset();
+            renderMessages();
+        });
+
+        // Load existing messages
+        renderMessages();
+    </script>
+</body>
+</html>
