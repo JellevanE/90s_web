@@ -43,34 +43,43 @@
 <script>
 const chatForm = document.getElementById('chat-form');
 const chatBox = document.getElementById('chat-box');
+const chatHistory = [];
 
-chatForm.addEventListener('submit', function(e) {
+chatForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const input = document.getElementById('user-input');
-    if (input.value.trim() === '') return;
+    const text = input.value.trim();
+    if (text === '') return;
+
     const userMsg = document.createElement('div');
     userMsg.className = 'message user';
-    userMsg.innerHTML = `<div class="icon">🙂</div><div class="text">${input.value}</div>`;
+    userMsg.innerHTML = `<div class="icon">🙂</div><div class="text">${text}</div>`;
     chatBox.appendChild(userMsg);
-    const userText = input.value;
-    input.value = '';
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    setTimeout(() => {
-        const responses = [
-            "Totally rad!",
-            "No way!",
-            "Sweet!",
-            "That's cool!",
-            `You said: ${userText}`
-        ];
+    chatHistory.push(text);
+    input.value = '';
+
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, history: chatHistory })
+        });
+        const data = await response.json();
         const botMsg = document.createElement('div');
         botMsg.className = 'message bot';
-        const reply = responses[Math.floor(Math.random() * responses.length)];
-        botMsg.innerHTML = `<div class="icon">🤖</div><div class="text">${reply}</div>`;
+        botMsg.innerHTML = `<div class="icon">🤖</div><div class="text">${data.reply}</div>`;
         chatBox.appendChild(botMsg);
         chatBox.scrollTop = chatBox.scrollHeight;
-    }, 500);
+        chatHistory.push(data.reply);
+    } catch (err) {
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        botMsg.innerHTML = `<div class="icon">🤖</div><div class="text">Error connecting to server</div>`;
+        chatBox.appendChild(botMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 });
 </script>
 </body>
