@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot - 90s Style Website</title>
+    <link rel="stylesheet" href="90s_style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to My 90s Website</h1>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="guestbook.html">Guestbook</a></li>
+                <li><a href="chat.html">Chat</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section>
+                <h2>Chatbot</h2>
+                <div class="chat-box" id="chat-box">
+                    <div class="message bot">
+                        <div class="icon">🤖</div>
+                        <div class="text">Hello! I'm your friendly 90s bot.</div>
+                    </div>
+                </div>
+                <form id="chat-form">
+                    <input type="text" id="user-input" placeholder="Type a message" autocomplete="off">
+                    <button type="submit">Send</button>
+                </form>
+            </section>
+        </main>
+        <footer>
+            <p>© 2024 My 90s Website</p>
+        </footer>
+    </div>
+<script>
+const chatForm = document.getElementById('chat-form');
+const chatBox = document.getElementById('chat-box');
+
+chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('user-input');
+    if (input.value.trim() === '') return;
+    const msg = document.createElement('div');
+    msg.className = 'message user';
+    msg.innerHTML = `<div class="icon">🙂</div><div class="text">${input.value}</div>`;
+    chatBox.appendChild(msg);
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+</script>
+</body>
+</html>
