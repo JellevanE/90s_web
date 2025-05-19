@@ -12,6 +12,21 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000` to browse the site.
 
+### Running the chat server
+
+The chatbot needs a small Python backend. Install the requirements and start the server:
+
+```bash
+pip install -r requirements.txt
+python3 chat_server.py
+```
+
+Once the server is running, open the site in another tab at `http://localhost:5000` to test the chat page.
+
+### Chat data flow
+
+`chat.html` uses JavaScript to send a `POST` request to `/api/chat` whenever a user submits a message. The JSON payload contains the current message and the conversation history. `chat_server.py` receives this data, processes it (currently with a dummy reply), and returns a JSON object with the bot's response and updated history. The browser script appends the response to the chat box so the conversation continues in the page.
+
 ## Hosting
 Any static website host can serve this project.
 
