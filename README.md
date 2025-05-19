@@ -13,11 +13,18 @@ python3 -m http.server 8000
 Then visit `http://localhost:8000` to browse the site.
 
 ## Hosting
+Any static website host can serve this project.
 
-Any static website host can serve this project. For GitHub Pages:
+### GitHub Pages
 1. Push the repository to GitHub.
 2. Enable GitHub Pages in the repository settings, choosing the `main` branch and `/` root.
 3. Your pages will be available at `https://<username>.github.io/<repository>`.
+
+### Custom Domain
+1. Upload these files to any hosting provider that supports static sites (or to your own server).
+2. Register a domain name with a registrar if you haven't already.
+3. Update your domain's DNS records (typically an A or CNAME record) to point to your host.
+4. After DNS propagation, visit your domain to see the site live.
 
 You can also host the files with other services that support static sites.
 
