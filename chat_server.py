@@ -1,15 +1,13 @@
+import os  # Add this import
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import CORS
 import time
 
-app = Flask(__name__, static_folder=".", static_url_path="")
+# Determine the absolute path to the directory containing chat_server.py
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__, static_folder=APP_ROOT, static_url_path="")  # Modified this line
 CORS(app)  # Enable CORS for all routes
-
-
-@app.get("/")
-def root():
-    """Serve the homepage."""
-    return app.send_static_file("index.html")
 
 
 @app.post('/api/chat')

@@ -89,6 +89,15 @@ marquee {
     margin-bottom: 10px;
 }
 
+.message.user {
+    flex-direction: row-reverse;
+}
+
+.message.user .icon {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
 .message .icon {
     width: 40px;
     height: 40px;
@@ -98,6 +107,11 @@ marquee {
 
 .message.bot .icon {
     animation: bounce 0.6s infinite alternate;
+}
+
+.message.bot .text {
+    font-weight: bold;
+    color: #4B0082; /* Dark Purple */
 }
 
 @keyframes bounce {
