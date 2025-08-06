@@ -13,18 +13,30 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
 
         h1 {
@@ -36,7 +48,78 @@
         .date {
             color: #666;
             font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
             margin-bottom: 30px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            padding: 4px;
+            position: relative;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-bar.low-progress {
+            background: linear-gradient(90deg, #ff6b6b, #ff5252);
+        }
+
+        .progress-bar.medium-progress {
+            background: linear-gradient(90deg, #ffd93d, #ffb700);
+        }
+
+        .progress-bar.high-progress {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+        }
+
+        .progress-bar.complete {
+            background: linear-gradient(90deg, #00c853, #00e676);
+        }
+
+        .progress-text {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            z-index: 1;
+            position: relative;
+        }
+
+        .progress-emoji {
+            position: absolute;
+            left: 10px;
+            font-size: 20px;
         }
 
         .add-task {
@@ -56,7 +139,7 @@
 
         .task-input:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: #667eea;
         }
 
         .priority-select {
@@ -70,17 +153,18 @@
 
         .add-btn {
             padding: 12px 24px;
-            background: #4CAF50;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .add-btn:hover {
-            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .section {
@@ -109,17 +193,30 @@
 
         .task-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             padding: 12px;
             margin-bottom: 8px;
             background: #f9f9f9;
             border-radius: 8px;
             border-left: 4px solid #ddd;
-            transition: transform 0.2s, opacity 0.3s;
+            transition: transform 0.2s, opacity 0.3s, box-shadow 0.2s;
+            cursor: move;
+            position: relative;
+        }
+
+        .task-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .task-item.drag-over {
+            transform: translateY(5px);
+            opacity: 0.8;
         }
 
         .task-item:hover {
-            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .task-item.high-priority {
@@ -141,12 +238,42 @@
             width: 20px;
             height: 20px;
             margin-right: 12px;
+            margin-top: 2px;
             cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .task-text {
             flex: 1;
             color: #333;
+            cursor: text;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            word-break: break-word;
+        }
+
+        .task-text:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .task-text.editing {
+            background: white;
+            border: 2px solid #667eea;
+            outline: none;
         }
 
         .priority-badge {
@@ -154,7 +281,13 @@
             padding: 4px 8px;
             border-radius: 4px;
             font-weight: 500;
-            margin-left: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        .priority-badge:hover {
+            transform: scale(1.05);
         }
 
         .high-badge {
@@ -172,8 +305,96 @@
             color: white;
         }
 
+        .task-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 28px;
+        }
+
+        .subtask-toggle {
+            font-size: 12px;
+            color: #667eea;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .subtask-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .subtasks-container {
+            margin-left: 28px;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 6px;
+        }
+
+        .subtask-item {
+            display: flex;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .subtask-checkbox {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .subtask-text {
+            flex: 1;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .subtask-text.done {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .add-subtask {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .subtask-input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .add-subtask-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .add-subtask-btn:hover {
+            background: #5a6edb;
+        }
+
+        .subtask-progress {
+            font-size: 12px;
+            color: #999;
+            margin-left: 8px;
+        }
+
         .done-task {
             opacity: 0.6;
+        }
+
+        .done-task .task-text {
             text-decoration: line-through;
         }
 
@@ -198,12 +419,43 @@
         .clear-done:hover {
             background: #555;
         }
+
+        .drag-handle {
+            position: absolute;
+            left: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 30px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #ccc,
+                #ccc 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            cursor: move;
+        }
+
+        .task-item:hover .drag-handle {
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Daily Task Tracker</h1>
         <div class="date" id="currentDate"></div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <span class="progress-emoji" id="progressEmoji">😴</span>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+        </div>
         
         <div class="add-task">
             <input type="text" class="task-input" id="taskInput" placeholder="Add a new task...">
@@ -242,11 +494,20 @@
             done: []
         };
 
+        let draggedElement = null;
+        let draggedTask = null;
+
         // Load tasks from storage
         function loadTasks() {
             const stored = localStorage.getItem('dailyTasks');
             if (stored) {
                 tasks = JSON.parse(stored);
+                // Ensure all tasks have subtasks array
+                [...tasks.active, ...tasks.done].forEach(task => {
+                    if (!task.subtasks) {
+                        task.subtasks = [];
+                    }
+                });
             }
             checkNewDay();
         }
@@ -263,8 +524,6 @@
             const today = new Date().toDateString();
             
             if (lastDate && lastDate !== today) {
-                // Move incomplete tasks to today
-                // Clear done tasks
                 tasks.done = [];
                 saveTasks();
             }
@@ -275,6 +534,63 @@
             const date = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('currentDate').textContent = date.toLocaleDateString('en-US', options);
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const totalTasks = tasks.active.length + tasks.done.length;
+            const completedTasks = tasks.done.length;
+            
+            // Calculate subtasks progress
+            let totalSubtasks = 0;
+            let completedSubtasks = 0;
+            
+            [...tasks.active, ...tasks.done].forEach(task => {
+                if (task.subtasks) {
+                    totalSubtasks += task.subtasks.length;
+                    completedSubtasks += task.subtasks.filter(st => st.completed).length;
+                }
+            });
+            
+            const totalItems = totalTasks + totalSubtasks;
+            const completedItems = completedTasks + completedSubtasks;
+            
+            const percentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressEmoji = document.getElementById('progressEmoji');
+            
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = percentage + '%';
+            
+            // Update color and emoji based on progress
+            progressBar.className = 'progress-bar';
+            if (percentage === 0) {
+                progressBar.classList.add('low-progress');
+                progressEmoji.textContent = '😴';
+            } else if (percentage < 30) {
+                progressBar.classList.add('low-progress');
+                progressEmoji.textContent = '🌱';
+            } else if (percentage < 60) {
+                progressBar.classList.add('medium-progress');
+                progressEmoji.textContent = '🚀';
+            } else if (percentage < 100) {
+                progressBar.classList.add('high-progress');
+                progressEmoji.textContent = '🔥';
+            } else {
+                progressBar.classList.add('complete');
+                progressEmoji.textContent = '🎉';
+            }
+            
+            // Hide text and emoji if bar is too small
+            if (percentage < 15) {
+                progressText.style.opacity = '0';
+                progressEmoji.style.opacity = '0';
+            } else {
+                progressText.style.opacity = '1';
+                progressEmoji.style.opacity = '1';
+            }
         }
 
         // Add new task
@@ -289,6 +605,7 @@
                     text: text,
                     priority: priority,
                     completed: false,
+                    subtasks: [],
                     createdAt: new Date().toISOString()
                 };
                 
@@ -312,6 +629,56 @@
             }
         }
 
+        // Edit task text
+        function editTaskText(id, newText) {
+            const task = [...tasks.active, ...tasks.done].find(t => t.id === id);
+            if (task && newText.trim()) {
+                task.text = newText.trim();
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Cycle priority
+        function cyclePriority(id) {
+            const task = tasks.active.find(t => t.id === id);
+            if (task) {
+                const priorities = ['low', 'medium', 'high'];
+                const currentIndex = priorities.indexOf(task.priority);
+                task.priority = priorities[(currentIndex + 1) % 3];
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Add subtask
+        function addSubtask(taskId, text) {
+            const task = tasks.active.find(t => t.id === taskId);
+            if (task && text.trim()) {
+                if (!task.subtasks) task.subtasks = [];
+                task.subtasks.push({
+                    id: Date.now(),
+                    text: text.trim(),
+                    completed: false
+                });
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // Toggle subtask
+        function toggleSubtask(taskId, subtaskId) {
+            const task = [...tasks.active, ...tasks.done].find(t => t.id === taskId);
+            if (task && task.subtasks) {
+                const subtask = task.subtasks.find(st => st.id === subtaskId);
+                if (subtask) {
+                    subtask.completed = !subtask.completed;
+                    saveTasks();
+                    renderTasks();
+                }
+            }
+        }
+
         // Clear all done tasks
         function clearDoneTasks() {
             if (confirm('Clear all completed tasks?')) {
@@ -321,11 +688,73 @@
             }
         }
 
+        // Drag and Drop handlers
+        function handleDragStart(e, task) {
+            draggedElement = e.currentTarget;
+            draggedTask = task;
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            
+            const afterElement = getDragAfterElement(e.currentTarget.parentElement, e.clientY);
+            const dragging = document.querySelector('.dragging');
+            
+            if (afterElement == null) {
+                e.currentTarget.parentElement.appendChild(dragging);
+            } else {
+                e.currentTarget.parentElement.insertBefore(dragging, afterElement);
+            }
+            
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            
+            // Update task order based on new DOM position
+            const allItems = [...document.querySelectorAll('#activeTasks .task-item')];
+            const newOrder = [];
+            
+            allItems.forEach(item => {
+                const taskId = parseInt(item.dataset.taskId);
+                const task = tasks.active.find(t => t.id === taskId);
+                if (task) newOrder.push(task);
+            });
+            
+            tasks.active = newOrder;
+            saveTasks();
+            
+            draggedElement = null;
+            draggedTask = null;
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
         // Render all tasks
         function renderTasks() {
             renderActiveList();
             renderDoneList();
             updateCounts();
+            updateProgress();
         }
 
         // Render active tasks
@@ -338,13 +767,7 @@
                 empty.style.display = 'block';
             } else {
                 empty.style.display = 'none';
-                // Sort by priority (high to low)
-                const sorted = [...tasks.active].sort((a, b) => {
-                    const priorities = { high: 3, medium: 2, low: 1 };
-                    return priorities[b.priority] - priorities[a.priority];
-                });
-                
-                sorted.forEach(task => {
+                tasks.active.forEach(task => {
                     const li = createTaskElement(task, false);
                     list.appendChild(li);
                 });
@@ -375,7 +798,21 @@
         function createTaskElement(task, isDone) {
             const li = document.createElement('li');
             li.className = `task-item ${task.priority}-priority`;
+            li.dataset.taskId = task.id;
             if (isDone) li.classList.add('done-task');
+            
+            // Add drag handle
+            const dragHandle = document.createElement('div');
+            dragHandle.className = 'drag-handle';
+            li.appendChild(dragHandle);
+            
+            // Add drag and drop events for active tasks
+            if (!isDone) {
+                li.draggable = true;
+                li.addEventListener('dragstart', (e) => handleDragStart(e, task));
+                li.addEventListener('dragover', handleDragOver);
+                li.addEventListener('dragend', handleDragEnd);
+            }
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -386,17 +823,145 @@
                 checkbox.onclick = () => toggleTask(task.id);
             }
             
-            const text = document.createElement('span');
+            const content = document.createElement('div');
+            content.className = 'task-content';
+            
+            const mainRow = document.createElement('div');
+            mainRow.className = 'task-main';
+            
+            const text = document.createElement('div');
             text.className = 'task-text';
             text.textContent = task.text;
+            text.contentEditable = !isDone;
+            
+            if (!isDone) {
+                text.onblur = (e) => {
+                    text.classList.remove('editing');
+                    editTaskText(task.id, e.target.textContent);
+                };
+                text.onfocus = () => {
+                    text.classList.add('editing');
+                };
+                text.onkeydown = (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        text.blur();
+                    }
+                };
+            }
             
             const badge = document.createElement('span');
             badge.className = `priority-badge ${task.priority}-badge`;
             badge.textContent = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+            if (!isDone) {
+                badge.onclick = () => cyclePriority(task.id);
+            }
+            
+            mainRow.appendChild(text);
+            mainRow.appendChild(badge);
+            content.appendChild(mainRow);
+            
+            // Subtasks section
+            if (task.subtasks && task.subtasks.length > 0) {
+                const completedSubtasks = task.subtasks.filter(st => st.completed).length;
+                const actions = document.createElement('div');
+                actions.className = 'task-actions';
+                
+                const toggle = document.createElement('div');
+                toggle.className = 'subtask-toggle';
+                toggle.innerHTML = `<span>▼</span> Subtasks <span class="subtask-progress">(${completedSubtasks}/${task.subtasks.length})</span>`;
+                toggle.onclick = () => {
+                    const container = li.querySelector('.subtasks-container');
+                    if (container.style.display === 'none') {
+                        container.style.display = 'block';
+                        toggle.querySelector('span').textContent = '▼';
+                    } else {
+                        container.style.display = 'none';
+                        toggle.querySelector('span').textContent = '▶';
+                    }
+                };
+                actions.appendChild(toggle);
+                content.appendChild(actions);
+                
+                const subtasksContainer = document.createElement('div');
+                subtasksContainer.className = 'subtasks-container';
+                
+                task.subtasks.forEach(subtask => {
+                    const subtaskItem = document.createElement('div');
+                    subtaskItem.className = 'subtask-item';
+                    
+                    const subtaskCheckbox = document.createElement('input');
+                    subtaskCheckbox.type = 'checkbox';
+                    subtaskCheckbox.className = 'subtask-checkbox';
+                    subtaskCheckbox.checked = subtask.completed;
+                    subtaskCheckbox.onclick = () => toggleSubtask(task.id, subtask.id);
+                    
+                    const subtaskText = document.createElement('span');
+                    subtaskText.className = 'subtask-text';
+                    if (subtask.completed) subtaskText.classList.add('done');
+                    subtaskText.textContent = subtask.text;
+                    
+                    subtaskItem.appendChild(subtaskCheckbox);
+                    subtaskItem.appendChild(subtaskText);
+                    subtasksContainer.appendChild(subtaskItem);
+                });
+                
+                content.appendChild(subtasksContainer);
+            }
+            
+            // Add subtask input for active tasks
+            if (!isDone) {
+                const actions = document.createElement('div');
+                actions.className = 'task-actions';
+                
+                if (!task.subtasks || task.subtasks.length === 0) {
+                    const addSubtaskLink = document.createElement('div');
+                    addSubtaskLink.className = 'subtask-toggle';
+                    addSubtaskLink.innerHTML = '+ Add subtasks';
+                    addSubtaskLink.onclick = () => {
+                        addSubtaskLink.style.display = 'none';
+                        const addSubtaskDiv = li.querySelector('.add-subtask');
+                        if (addSubtaskDiv) {
+                            addSubtaskDiv.style.display = 'flex';
+                            addSubtaskDiv.querySelector('input').focus();
+                        }
+                    };
+                    actions.appendChild(addSubtaskLink);
+                    content.appendChild(actions);
+                }
+                
+                const addSubtaskDiv = document.createElement('div');
+                addSubtaskDiv.className = 'add-subtask';
+                addSubtaskDiv.style.display = task.subtasks && task.subtasks.length > 0 ? 'flex' : 'none';
+                
+                const subtaskInput = document.createElement('input');
+                subtaskInput.type = 'text';
+                subtaskInput.className = 'subtask-input';
+                subtaskInput.placeholder = 'Add subtask...';
+                subtaskInput.onkeydown = (e) => {
+                    if (e.key === 'Enter' && e.target.value.trim()) {
+                        addSubtask(task.id, e.target.value);
+                        e.target.value = '';
+                    }
+                };
+                
+                const addBtn = document.createElement('button');
+                addBtn.className = 'add-subtask-btn';
+                addBtn.textContent = 'Add';
+                addBtn.onclick = () => {
+                    if (subtaskInput.value.trim()) {
+                        addSubtask(task.id, subtaskInput.value);
+                        subtaskInput.value = '';
+                    }
+                };
+                
+                addSubtaskDiv.appendChild(subtaskInput);
+                addSubtaskDiv.appendChild(addBtn);
+                content.appendChild(addSubtaskDiv);
+            }
             
             li.appendChild(checkbox);
-            li.appendChild(text);
-            li.appendChild(badge);
+            li.appendChild(content);
             
             return li;
         }
